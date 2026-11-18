@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Umbra — Projeção da mesa</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="projection" data-projection>
+  <main class="map-stage" id="projection-stage" aria-label="Mapa da sessão">
+    <div class="map-viewport">
+      <div class="board" id="projection-board" hidden>
+        <img class="board-image" alt="" draggable="false">
+        <div class="map-grid" hidden></div>
+        <div class="token-layer"></div>
+        <div class="fog-layer" aria-hidden="true"></div>
+      </div>
+      <p id="projection-empty" class="map-empty">Aguardando o cenário do mestre.</p>
+    </div>
+  </main>
+  <button id="fullscreen" class="button small fullscreen-button" type="button" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></svg><span>Tela cheia</span></button>
+</body>
+</html>

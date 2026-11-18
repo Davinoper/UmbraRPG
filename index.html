@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Painel do mestre para organizar e projetar sua mesa de RPG.">
+  <title>Umbra — Mesa de RPG</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-die" viewBox="0 0 24 24"><path d="m12 2 9 5v10l-9 5-9-5V7zM12 2l5 13H7L12 2ZM3 7l4 8-4 2m18-10-4 8 4 2m-14-2 5 7 5-7"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15m6-12v15"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><path d="M3 20v-2a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v2M16 4a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 5v2"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 17 5-5 4 4 4-5 5 6"/></symbol>
+    <symbol id="i-screen" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16M12 4v16"/></symbol>
+    <symbol id="i-fog" viewBox="0 0 24 24"><path d="M4 8h16M2 12h16m-14 4h16m-15 4h14"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5v16m0-16C9 3 5 3 2 4v15c3-1 7-1 10 2 3-3 7-3 10-2V4c-3-1-7-1-10 1Z"/></symbol>
+    <symbol id="i-monster" viewBox="0 0 24 24"><path d="M5 9 3 4l6 3m10 2 2-5-6 3M4 13a8 7 0 1 1 16 0v4l-3 3H7l-3-3Zm4-1h.01m8 0h.01M9 16l1 2h4l1-2"/></symbol>
+    <symbol id="i-chest" viewBox="0 0 24 24"><path d="M3 11V9a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10H3zm0 0h7m4 0h7m-11-1h4v4h-4z"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 4h8l10 10-7 7L3 10zM7 8h.01"/></symbol>
+  </svg>
+
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><svg class="icon"><use href="#i-die"/></svg></div>
+        <div><span class="brand-name">Umbra</span><span class="brand-caption">MESA DE RPG</span></div>
+      </div>
+      <nav class="navigation" aria-label="Painel do mestre">
+        <button type="button" data-view="mesa" aria-current="page"><svg class="icon"><use href="#i-map"/></svg>Mesa</button>
+        <button type="button" data-view="fichas"><svg class="icon"><use href="#i-users"/></svg>Personagens</button>
+        <button type="button" data-view="monstros"><svg class="icon"><use href="#i-monster"/></svg>Monstros</button>
+        <button type="button" data-view="itens"><svg class="icon"><use href="#i-chest"/></svg>Itens</button>
+        <button type="button" data-view="profissoes"><svg class="icon"><use href="#i-tag"/></svg>Profissões</button>
+        <button type="button" data-view="cenarios"><svg class="icon"><use href="#i-image"/></svg>Cenários</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <section class="dice" aria-labelledby="dice-title">
+          <h2 id="dice-title"><svg class="icon"><use href="#i-die"/></svg>Dados</h2>
+          <div class="dice-actions"><button class="button small" type="button" data-die="6">d6</button><button class="button small" type="button" data-die="20">d20</button></div>
+          <output id="dice-result" aria-live="polite">Escolha um dado</output>
+        </section>
+        <p class="local-label"><span class="local-dot"></span>Armazenamento local</p>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <section id="mesa" class="view" aria-labelledby="table-title">
+        <header class="page-header">
+          <div><h1 id="table-title">Mesa do mestre</h1><p>Prepare o cenário e conduza a sessão.</p></div>
+          <button id="open-projection" class="button primary" type="button"><svg class="icon"><use href="#i-screen"/></svg>Abrir projeção</button>
+        </header>
+        <div class="table-layout">
+          <div class="table-main">
+            <section class="panel map-panel" aria-labelledby="map-title">
+              <div class="map-toolbar">
+                <div class="map-heading"><svg class="icon"><use href="#i-map"/></svg><h2 id="map-title">Mapa</h2></div>
+                <div class="map-tools">
+                  <button id="toggle-grid" class="button small grid-button" type="button" aria-pressed="false"><svg class="icon"><use href="#i-grid"/></svg>Grade</button>
+                  <button id="toggle-fog" class="button small grid-button" type="button" aria-pressed="false" aria-controls="fog-tools"><svg class="icon"><use href="#i-fog"/></svg>Névoa</button>
+                </div>
+              </div>
+              <div class="camera-tools" role="group" aria-label="Enquadramento do mapa">
+                <div class="zoom-controls">
+                  <button id="zoom-out" class="button small icon-button" type="button" aria-label="Diminuir zoom">−</button>
+                  <output id="map-zoom" aria-live="polite">100%</output>
+                  <button id="zoom-in" class="button small icon-button" type="button" aria-label="Aumentar zoom"><svg class="icon"><use href="#i-plus"/></svg></button>
+                </div>
+                <button id="toggle-pan" class="button small grid-button" type="button" aria-pressed="false">Mover mapa</button>
+                <button id="reset-camera" class="button small" type="button">Mapa inteiro</button>
+                <div class="rotation-controls">
+                  <label for="map-rotation">Rotação</label>
+                  <input id="map-rotation" type="range" min="0" max="359" step="1" value="0">
+                  <output id="map-angle" for="map-rotation">0°</output>
+                </div>
+              </div>
+              <div id="fog-tools" class="fog-tools" role="group" aria-label="Editar névoa" hidden>
+                <button class="button small grid-button" type="button" data-fog-mode="cover" aria-pressed="true">Cobrir</button>
+                <button class="button small grid-button" type="button" data-fog-mode="reveal" aria-pressed="false">Revelar</button>
+              </div>
+              <div class="map-stage" id="master-stage">
+                <div class="map-viewport">
+                  <div class="board" id="master-board" hidden>
+                    <img class="board-image" alt="" draggable="false">
+                    <div class="map-grid" hidden></div>
+                    <div class="fog-layer" aria-hidden="true"></div>
+                    <div class="token-layer"></div>
+                    <div class="fog-selection" aria-hidden="true" hidden></div>
+                  </div>
+                  <p class="map-empty" id="master-empty">Selecione um cenário para abrir o mapa.</p>
+                </div>
+              </div>
+              <p class="map-hint" id="token-hint">Arraste para mover. Clique em um personagem com GIFs para escolher a animação.</p>
+              <p class="map-hint" id="fog-hint" hidden>Arraste no mapa para marcar uma área. Clique em Névoa novamente para mover os tokens.</p>
+              <p class="map-hint" id="pan-hint" hidden>Arraste o cenário para enquadrar a área da projeção. Clique em Mover mapa novamente para voltar aos tokens.</p>
+            </section>
+            <section class="panel narrative" id="narrative" hidden>
+              <h2><svg class="icon"><use href="#i-book"/></svg>Abertura da sessão</h2>
+              <p class="opening-text" id="scene-intro"></p>
+              <div id="gm-notes" class="gm-notes" hidden><h3>Anotações do mestre</h3><p></p></div>
+            </section>
+          </div>
+          <aside class="table-tools" aria-label="Controles do cenário">
+            <section class="panel controls">
+              <h2><svg class="icon"><use href="#i-image"/></svg>Cenário ativo</h2>
+              <label class="sr-only" for="active-scene">Cenário ativo</label>
+              <select id="active-scene"></select>
+              <img id="scene-preview" class="scene-preview" alt="Prévia do cenário" hidden>
+              <button type="button" id="edit-active-scene" class="button small full">Editar cenário</button>
+            </section>
+            <section class="panel controls">
+              <h2><svg class="icon"><use href="#i-users"/></svg>Tokens na mesa <span id="token-count" class="count">0</span></h2>
+              <div class="token-sizing">
+                <label for="token-size-target">Tamanho dos tokens</label>
+                <select id="token-size-target" aria-describedby="token-size-help"></select>
+                <div class="token-size-actions">
+                  <button type="button" id="decrease-token-size" class="button small icon-button" aria-label="Diminuir tamanho dos tokens">−</button>
+                  <output id="token-size-value" aria-live="polite">100%</output>
+                  <button type="button" id="increase-token-size" class="button small icon-button" aria-label="Aumentar tamanho dos tokens"><svg class="icon"><use href="#i-plus"/></svg></button>
+                </div>
+                <p id="token-size-help" class="muted" hidden>Ajuste em relação ao tamanho de todos.</p>
+              </div>
+              <ul id="token-list" class="token-list"></ul>
+              <details id="retired-tokens" class="retired-tokens" hidden>
+                <summary>Tokens retirados <span id="retired-token-count" class="count"></span></summary>
+                <ul id="retired-token-list" class="token-list"></ul>
+              </details>
+              <form id="add-token-form" class="add-token">
+                <label class="sr-only" for="available-character">Personagem para adicionar</label>
+                <select id="available-character"></select>
+                <button type="submit" class="button small icon-button" aria-label="Adicionar token" title="Adicionar token"><svg class="icon"><use href="#i-plus"/></svg></button>
+              </form>
+              <button type="button" id="new-table-character" class="text-button">Criar personagem</button>
+              <form id="spawn-monster-form" class="add-token monster-spawn">
+                <label class="sr-only" for="available-monster">Monstro para colocar na mesa</label>
+                <select id="available-monster"></select>
+                <button type="submit" class="button small icon-button" aria-label="Colocar monstro no mapa" title="Colocar monstro no mapa"><svg class="icon"><use href="#i-plus"/></svg></button>
+              </form>
+              <button type="button" id="open-monsters" class="text-button">Gerenciar monstros</button>
+              <form id="place-item-form" class="add-token item-placement">
+                <label class="sr-only" for="available-item">Item para colocar na mesa</label>
+                <select id="available-item"></select>
+                <button type="submit" class="button small icon-button" aria-label="Colocar item no mapa" title="Colocar item no mapa"><svg class="icon"><use href="#i-plus"/></svg></button>
+              </form>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section id="fichas" class="view" aria-labelledby="characters-title" hidden>
+        <header class="page-header">
+          <div><h1 id="characters-title">Personagens</h1><p>Crie e edite as fichas da campanha.</p></div>
+          <button class="button primary" id="new-character" type="button"><svg class="icon"><use href="#i-plus"/></svg>Novo personagem</button>
+        </header>
+        <div class="record-grid" id="character-list"></div>
+      </section>
+
+      <section id="monstros" class="view" aria-labelledby="monsters-title" hidden>
+        <header class="page-header">
+          <div><h1 id="monsters-title">Monstros</h1><p>Cadastre criaturas e coloque cópias no cenário ativo.</p></div>
+          <button class="button primary" id="new-monster" type="button"><svg class="icon"><use href="#i-plus"/></svg>Novo monstro</button>
+        </header>
+        <div class="record-grid" id="monster-list"></div>
+      </section>
+
+      <section id="itens" class="view" aria-labelledby="items-title" hidden>
+        <header class="page-header">
+          <div><h1 id="items-title">Itens</h1><p>Cadastre objetos e coloque-os nos seus cenários.</p></div>
+          <button class="button primary" id="new-item" type="button"><svg class="icon"><use href="#i-plus"/></svg>Novo item</button>
+        </header>
+        <div class="record-grid" id="item-list"></div>
+      </section>
+
+      <section id="profissoes" class="view" aria-labelledby="professions-title" hidden>
+        <header class="page-header">
+          <div><h1 id="professions-title">Profissões</h1><p>Crie as etiquetas que serão usadas nas fichas.</p></div>
+          <button class="button primary" id="new-profession" type="button"><svg class="icon"><use href="#i-plus"/></svg>Nova profissão</button>
+        </header>
+        <div class="record-grid" id="profession-list"></div>
+      </section>
+
+      <section id="cenarios" class="view" aria-labelledby="scenes-title" hidden>
+        <header class="page-header">
+          <div><h1 id="scenes-title">Cenários</h1><p>Organize os mapas e as aberturas da sua história.</p></div>
+          <button class="button primary" id="new-scene" type="button"><svg class="icon"><use href="#i-plus"/></svg>Novo cenário</button>
+        </header>
+        <div class="record-grid" id="scene-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="notification" id="notification" role="status" aria-live="polite" hidden></div>
+
+  <dialog id="character-dialog" aria-labelledby="character-form-title">
+    <form id="character-form">
+      <div class="dialog-header"><h2 id="character-form-title">Ficha do personagem</h2><button class="button small icon-button" type="button" data-close aria-label="Fechar"><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <label>Nome <input name="name" required maxlength="60" autofocus></label>
+      <label>Classe ou conceito <input name="role" maxlength="60" placeholder="Ex.: Guardiã da floresta"></label>
+      <label>Retrato original do personagem <input name="image" type="file" accept="image/*"></label>
+      <div class="portrait-controls" hidden><span class="token portrait-preview" aria-hidden="true"></span><label class="check-option"><input name="removeImage" type="checkbox"> Remover retrato atual</label></div>
+      <fieldset class="form-fieldset">
+        <legend>Animações do token</legend>
+        <label>Adicionar GIFs <input name="animations" type="file" accept="image/gif,.gif" multiple></label>
+        <ul id="character-animations" class="character-animations" hidden></ul>
+      </fieldset>
+      <fieldset class="form-fieldset"><legend>Profissões</legend><div id="character-professions" class="profession-options"></div></fieldset>
+      <div class="field-row">
+        <label>Vida atual <input name="hp" type="number" min="0" max="9999" required></label>
+        <label>Vida máxima <input name="maxHp" type="number" min="1" max="9999" required></label>
+        <label>Cor do token <input name="color" type="color"></label>
+      </div>
+      <label>Atributos <textarea name="attributes" maxlength="1000" rows="3" placeholder="Ex.: Força 12, Agilidade 15"></textarea></label>
+      <label>Anotações <textarea name="notes" maxlength="2500" rows="3"></textarea></label>
+      <p class="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button" type="button" data-close>Cancelar</button><button class="button primary" type="submit">Salvar ficha</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="token-animation-dialog" aria-labelledby="token-animation-title">
+    <form id="token-animation-form">
+      <div class="dialog-header"><h2 id="token-animation-title">Animação do token</h2><button class="button small icon-button" type="button" data-close aria-label="Fechar" autofocus><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <p id="token-animation-character" class="muted"></p>
+      <div id="token-animation-options" class="token-animation-options"></div>
+      <p class="form-error" role="alert" hidden></p>
+    </form>
+  </dialog>
+
+  <dialog id="monster-dialog" aria-labelledby="monster-form-title">
+    <form id="monster-form">
+      <div class="dialog-header"><h2 id="monster-form-title">Monstro</h2><button class="button small icon-button" type="button" data-close aria-label="Fechar"><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <label>Nome <input name="name" required maxlength="60" autofocus></label>
+      <div class="field-row monster-fields">
+        <label>Vida máxima <input name="maxHp" type="number" min="1" max="9999" required></label>
+        <label>Cor do token <input name="color" type="color"></label>
+      </div>
+      <label>Retrato do monstro <input name="image" type="file" accept="image/*"></label>
+      <div class="portrait-controls" hidden><span class="token portrait-preview" aria-hidden="true"></span><label class="check-option"><input name="removeImage" type="checkbox"> Remover retrato atual</label></div>
+      <p class="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button" type="button" data-close>Cancelar</button><button class="button primary" type="submit">Salvar monstro</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="item-dialog" aria-labelledby="item-form-title">
+    <form id="item-form">
+      <div class="dialog-header"><h2 id="item-form-title">Item</h2><button class="button small icon-button" type="button" data-close aria-label="Fechar"><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <label>Nome <input name="name" required maxlength="60" autofocus></label>
+      <label>Imagem do item <input name="image" type="file" accept="image/*"></label>
+      <div class="portrait-controls" hidden><span class="token portrait-preview" aria-hidden="true"></span><label class="check-option"><input name="removeImage" type="checkbox"> Remover imagem atual</label></div>
+      <label>Anotações do mestre <textarea name="notes" maxlength="2500" rows="3"></textarea></label>
+      <p class="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button" type="button" data-close>Cancelar</button><button class="button primary" type="submit">Salvar item</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="profession-dialog" aria-labelledby="profession-form-title">
+    <form id="profession-form">
+      <div class="dialog-header"><h2 id="profession-form-title">Profissão</h2><button class="button small icon-button" type="button" data-close aria-label="Fechar"><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <label>Nome da profissão <input name="name" required maxlength="60" autofocus placeholder="Ex.: Ferreiro"></label>
+      <p class="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button" type="button" data-close>Cancelar</button><button class="button primary" type="submit">Salvar profissão</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="scene-dialog" aria-labelledby="scene-form-title">
+    <form id="scene-form">
+      <div class="dialog-header"><h2 id="scene-form-title">Cenário</h2><button class="button small icon-button" type="button" data-close aria-label="Fechar"><svg class="icon"><use href="#i-close"/></svg></button></div>
+      <label>Nome <input name="name" required maxlength="80" autofocus></label>
+      <label>Imagem do mapa <input name="image" type="file" accept="image/png,image/jpeg,image/webp,image/avif,image/gif,image/bmp"></label>
+      <p class="field-help" id="scene-image-help"></p>
+      <label>Texto de abertura <textarea name="intro" maxlength="2500" rows="4"></textarea></label>
+      <label>Anotações do mestre <textarea name="notes" maxlength="2500" rows="3"></textarea></label>
+      <p class="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button" type="button" data-close>Cancelar</button><button class="button primary" type="submit">Salvar cenário</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="delete-dialog" aria-labelledby="delete-title">
+    <form id="delete-form">
+      <h2 id="delete-title">Confirmar exclusão</h2>
+      <p id="delete-message"></p>
+      <p class="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button class="button" type="button" data-close autofocus>Cancelar</button><button class="button danger" type="submit">Excluir</button></div>
+    </form>
+  </dialog>
+</body>
+</html>
